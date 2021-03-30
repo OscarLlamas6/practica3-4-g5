@@ -5,7 +5,7 @@ const usuarioSchema = new Schema({
     apellido: { type : String , required : true},
     CUI: { type : String , unique : true, required : true},
     cuenta: { type : String , unique : true, required : true},
-    saldo: { type : String , required : true},
+    saldo: { type : Number, required : true},
     correo: { type : String , required : true},
     password: { type : String , required : true}
 });
