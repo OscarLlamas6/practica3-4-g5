@@ -4,13 +4,11 @@ const Usuario = require('../models/usuario');
 const Transaccion = require('../models/transaccion');
 const { v4: uuidv4 } = require('uuid');
 const router = Router();
+const { generarFecha } = require('../generarFecha');
 
 router.get('/', (req, res) => {
     res.json({'Resultado': 'API AYD1: Practica 3 y 4 - Grupo 5! :D'});
 });
-
-
-
 
 router.post("/nuevoUsuario", async (req, res) => {
 
@@ -85,7 +83,7 @@ router.post('/login', async (req, res) => {
                 res.status(404);
                 res.send({ message : "crendenciales incorrectas o usuario no existe" }); 
                 console.log("crendenciales incorrectas o usuario no existe :c");
-            } else{ 
+            } else{            
                 res.status(202);
                 console.log("crendenciales correctas :3")
                 res.json(docs);              
@@ -97,6 +95,83 @@ router.post('/login', async (req, res) => {
         res.status(404);
         res.send({ message : error });
         console.log("crendenciales incorrectas o usuario no existe :c");
+    }
+
+});
+
+
+router.post('/nuevaTransaccion', async (req, res) => {
+
+    try {
+
+        const data = req.body;
+
+        var idTransaccion = uuidv4() + "";
+        idTransaccion = idTransaccion.toString();
+        idTransaccion = idTransaccion.replace(/[a-zA-Z\-]/g, '').substring(0,8);
+        var seguirValidando = true;
+
+        while(seguirValidando){
+            await Transaccion.findOne({ ID: idTransaccion }, function (err, docs) { 
+                if (err){ 
+                    console.log(err)
+                    res.status(404);
+                    res.send({ message : err }); 
+                }
+                else if (docs == null) seguirValidando = false;                  
+                else {
+                    idTransaccion = uuidv4() + "";
+                    idTransaccion = idTransaccion.toString();
+                    idTransaccion = idTransaccion.replace(/[a-zA-Z\-]/g, '').substring(0,8);
+            }  
+            });            
+        }
+
+
+        await Usuario.findOne({ cuenta: data.CuentaDestino }, async function (err, docs) { 
+            if (err){ 
+                console.log(err)
+                res.status(404);
+                res.send({ message : err }); 
+            } else if (docs == null) {
+                res.status(404);
+                res.send({ message : "La cuenta " + data.CuentaDestino.toString() + " no corresponde ningun usuario." }); 
+                console.log("La cuenta " + data.CuentaDestino.toString() + " no corresponde ningun usuario.");
+            } else{ 
+
+                let date = generarFecha();
+                let credito = data.monto;
+                let debito = data.monto * (-1);
+                let descripcion = data.descripcion == null || undefined ? "" : data.descripcion; 
+
+                await Transaccion.create({
+                    ID: idTransaccion,
+                    CuentaOrigen: data.CuentaOrigen,
+                    CuentaDestino: data.CuentaDestino,
+                    monto: data.monto,
+                    fecha: date,
+                    descripcion: descripcion
+                }); 
+
+                await Usuario.findOneAndUpdate(
+                    { cuenta: data.CuentaDestino },
+                    { $inc : { saldo : credito } } 
+                );
+
+                await Usuario.findOneAndUpdate(
+                    { cuenta: data.CuentaOrigen },
+                    { $inc : { saldo : debito } } 
+                );
+
+                res.status(202);
+                res.json({ transaccion : idTransaccion });              
+            } 
+        });
+        
+    } catch (error) {
+        console.log(error)
+        res.status(404);
+        res.send({ message : error });
     }
 
 });
