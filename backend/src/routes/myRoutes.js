@@ -99,7 +99,6 @@ router.post('/login', async (req, res) => {
 
 });
 
-
 router.post('/nuevaTransaccion', async (req, res) => {
 
     try {
@@ -217,5 +216,32 @@ router.post('/reporteTransaccion', async (req, res) => {
 
 });
 
+router.post('/consultarSaldo', async (req, res) => {
+
+    try {
+
+        const data = req.body;
+        await Usuario.findOne({ cuenta: data.cuenta }, function (err, docs) { 
+            if (err){ 
+                console.log(err)
+                res.status(404);
+                res.send({ message : err });
+            } else if (docs == null) {
+                res.status(404);
+                res.send({ message : "Usuario no existe" }); 
+                console.log("Usuario no existe :c");
+            } else{            
+                res.status(202);
+                res.json({ saldo : JSON.parse(JSON.stringify(docs)).saldo});              
+            } 
+        });
+        
+    } catch (error) {
+        console.log(error)
+        res.status(404);
+        res.send({ message : error });
+    }
+
+});
 
 module.exports = router; 
