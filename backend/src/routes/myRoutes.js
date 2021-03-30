@@ -70,4 +70,35 @@ router.post("/nuevoUsuario", async (req, res) => {
     
 });
 
+router.post('/login', async (req, res) => {
+
+    try {
+
+        const data = req.body;
+        await Usuario.findOne({ cuenta: data.cuenta, password: data.password}, function (err, docs) { 
+            if (err){ 
+                console.log(err)
+                res.status(404);
+                res.send({ message : err }); 
+                console.log("crendenciales incorrectas o usuario no existe :c");
+            } else if (docs == null) {
+                res.status(404);
+                res.send({ message : "crendenciales incorrectas o usuario no existe" }); 
+                console.log("crendenciales incorrectas o usuario no existe :c");
+            } else{ 
+                res.status(202);
+                console.log("crendenciales correctas :3")
+                res.json(docs);              
+            } 
+        });
+        
+    } catch (error) {
+        console.log(error)
+        res.status(404);
+        res.send({ message : error });
+        console.log("crendenciales incorrectas o usuario no existe :c");
+    }
+
+});
+
 module.exports = router; 
