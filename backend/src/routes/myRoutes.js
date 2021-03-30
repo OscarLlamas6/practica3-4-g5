@@ -176,4 +176,46 @@ router.post('/nuevaTransaccion', async (req, res) => {
 
 });
 
+router.post('/reporteTransaccion', async (req, res) => {
+
+    try {
+
+        const data = req.body;
+        var debitos, creditos;
+
+        await Transaccion.find({ CuentaOrigen: data.cuenta}, function (err, deb) {
+            if (err){ 
+                console.log(err)
+                res.status(404);
+                res.send({ message : err }); 
+                console.log("Error al obtener transacciones :c");
+            } else{ 
+                console.log("Debitos obtenidos correctamente :D");
+                debitos = deb;
+            } 
+        }); 
+
+        await Transaccion.find({ CuentaDestino: data.cuenta}, function (err, cred) {
+            if (err){ 
+                console.log(err)
+                res.status(404);
+                res.send({ message : err }); 
+                console.log("Error al obtener transacciones :c");
+            } else{ 
+                console.log("Creditos obtenidos correctamente :D");
+                creditos = cred;
+            } 
+        }); 
+        res.status(202);
+        res.json({"creditos": JSON.parse(JSON.stringify(creditos)), "debitos": JSON.parse(JSON.stringify(debitos))});
+        
+    } catch (error) {
+        console.log(error)
+        res.status(404);
+        res.send({ message : error });
+    }
+
+});
+
+
 module.exports = router; 
