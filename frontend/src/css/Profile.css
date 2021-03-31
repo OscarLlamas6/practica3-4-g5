@@ -3,13 +3,26 @@
 }
 
 .salto{
-    height: 20px;
+    height: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.salto2{
+    height: 10px;
+}
+
+.centro{
+    align-items: center;
 }
 
 .col1{
     align-items: center;
-    padding-top: 50px;
-    background: #58D3F7;
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    background: #6e78e5;
 }
 
 .col2{
@@ -89,7 +102,10 @@
 }
 
 .usuario{
-    padding-top: 75px;
+    padding-top: 15px;
+    padding-left: 10px;
+    background-color: white;
+    text-align: left;
 }
 
 .contenedor {

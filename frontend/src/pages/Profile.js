@@ -26,6 +26,7 @@ export default class Profile extends Component {
         data:[],
         modalEditar: false,
         modalAlbum: false,
+        modalSaldo: false,
         form:{
             userName: '',
             publi: '',
@@ -76,15 +77,19 @@ export default class Profile extends Component {
         this.setState({modalEditar: !this.state.modalEditar})
     }
 
+    modalVerSaldo=()=>{
+        this.setState({modalSaldo: !this.state.modalSaldo})
+    }
+
     modaEditarAlbum=()=>{
         this.setState({modalAlbum: !this.state.modalAlbum})
     }
 
     componentDidMount(){
         if(!cookiess.get('username')){
-            window.location.href='./';
+            //window.location.href='./';
         }
-        this.obtenerPublicaciones()
+        //this.obtenerPublicaciones()
     }
 
 
@@ -173,27 +178,38 @@ export default class Profile extends Component {
                 <div className="container-lg">
                 <div className="card text-center">
                     <div className="col1">
-                        <div className="marco1">
-                        <img  className="fotoPerfil" src={foto}></img>
+                        <div className="usuario">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-8"><h3>Oscar Mazariegos</h3></div>
+                                <div class="col-4"><h5>No. de Cuenta: 37747947969500</h5></div>
+                            </div>
+                        </div>                        
                         </div>
-                    </div>
-                    <div className="usuario">
-                    <h2>@{usuario}</h2>
-                    <h4>{nombre} {apellido}</h4>
-                    </div>
-                    <div className="salto"></div>
-                    <div className="salto"></div>
-                    <div className="row justify-content-md-center">
-                        <div className="col-md-auto">
-                        <button type="button" className="btn btn-info btn-lg btni" onClick={()=>this.modaEditarEstado()}>Crear Publicación</button>
+
+                        <div className="salto"> </div>
+
+                        <div className="usuario">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h4>Mis datos:</h4>
+                                    <p>Oscar Eduardo</p>
+                                    <p>Mazariegos Lópes</p>
+                                    <p>2871335160101</p>
+                                    <p>oscarmazariegos@gmail.com</p>
+                                </div>
+                                <div class="col-4">
+                                    <div className="salto2"></div>
+                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modaEditarEstado()}>Realizar Transferencia</button>
+                                    <div className="salto2"></div>
+                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modalVerSaldo()}>Consultar Saldo</button>
+                                    <div className="salto2"></div>
+                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modaEditarEstado()}>Reporte</button>
+                                </div>
+                            </div>
+                        </div>                        
                         </div>
-                    </div>
-                    <div className="salto"></div>
-                </div>
-                <div className="publicaciones">
-                <div className="salto"></div>
-                    <div className="container">
-                        {pp}
                     </div>
                 </div>
                 </div>
@@ -223,6 +239,29 @@ export default class Profile extends Component {
                         </button>
                         <button className="btn btn-dark" onClick={()=>this.modaEditarEstado()}>
                             Cancelar
+                        </button>
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={this.state.modalSaldo}>
+                    <ModalHeader toggle={this.modalVerSaldo} style={{display: ''}}>
+                    Consultar Saldo
+                    </ModalHeader>
+                    <ModalBody>
+                        <div className="container">
+                            <div className="row justify-content-md-center">
+                                <div className="col-md-auto">
+                                    <img src="https://www.pngkey.com/png/full/9-97998_download-svg-download-png-billetes-con-alas.png" height="140px"></img>
+                                    <h4>Tu saldo actual es:</h4>
+                                    <h4>Q. 12,000.00</h4>
+                                    <br></br>
+                                </div>
+                            </div>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+                        <button className="btn btn-info" onClick={this.PublicarEstado}>
+                            Consultar
                         </button>
                     </ModalFooter>
                 </Modal>
