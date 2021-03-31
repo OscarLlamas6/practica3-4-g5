@@ -4,7 +4,7 @@ import axios from 'axios';
 import user from '../img/user.png';
 import swal from 'sweetalert';
 
-const url = "https://shrouded-coast-79182.herokuapp.com/new";
+const url = "https://infinite-harbor-77648.herokuapp.com/nuevoUsuario";
 
 const cookies = new Cookies();
 let enBase64 = '';
@@ -18,20 +18,19 @@ export default class FormularioRegistro extends Component{
      //   super();
         //this.
         state = {
-            userName: '',
             name: '',
             lastName: '',
-            contra: '',
-            contra2: '',
-            foto: "",
-            usuarios: []
+            CUI: '',
+            saldo: 0,
+            correo: '',
+            password: ''
         }
     //}
 
     // Retorna false y muestra un swal informando que datos estan erroneos/incompletos. 
     // Retorna true si los datos son validos
     ComprobacionYMensaje(){
-        if(this.state.userName == '' || this.state.name == ''  || this.state.lastName == '' || this.state.contra == '' || this.state.contra2 == '' || this.state.foto == ''){
+        if(this.state.name == ''  || this.state.lastName == '' || this.state.CUI == '' || this.state.saldo == 0 || this.state.correo == '' || this.state.password == ''){
             swal({
                 title: "Error",
                 text: "Llenar todos los campos",
@@ -40,63 +39,18 @@ export default class FormularioRegistro extends Component{
             });
             return false;
         }
-
-        if(this.state.contra != this.state.contra2){
-            swal({
-                title: "error",
-                text: "la contraseña no coincide",
-                icon: "error",
-                button: "aceptar"
-            });
-            return false;
-        }
         
         return true;
     }
 
     render(){
-        const convertirBase64=(archivos)=>{
-            Array.from(archivos).forEach(archivo=>{
-                var reader = new FileReader();
-                reader.readAsDataURL(archivo);
-                reader.onload=function(){
-                    var aux=[];
-                    var base64 = reader.result;
-                    imagen = base64;
-                    console.log("a base 64");
-                    console.log(imagen);
-                    aux = base64.split(',');
-                    enBase64 = aux[1];
-                    console.log(enBase64);
-                    var aux2, aux3 = [];
-                    aux2 =aux[0].split('/');
-                    aux3 = aux2[1].split(';');
-                    ext = aux3[0]
-                    console.log('la extension es: ' + ext);
-                }
-            })
-        }
+        
         return(
             
             <div className="modal-dialog text-center">
             <div className="col-sm-8 cuadro-central">
                 <div className="modal-content">
-                    <div className="col-12 user-img">
-                        <img src={imagen}></img>
-                    </div>
                     <form onSubmit={this._handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="uFoto" className="form-label">Seleccionar foto</label>
-                            <div id="div_file">
-                                <label id="texto">Add Photo</label>
-                                <input type="file" id="Photo" accept="image/png, image/jpeg" multiple onChange={(e)=>convertirBase64(e.target.files)}></input>   
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label htmlFor="uUsuario" className="form-label">Usuario</label>
-                            <input onChange={e => this.setState({userName: e.target.value})} type="text" className="form-control" id="uUsuario" placeholder="Usuario" />
-                        </div>
                         <div className="mb-3">
                             <label htmlFor="uNombre" className="form-label">Nombre</label>
                             <input onChange={e => this.setState({name: e.target.value})} type="text" className="form-control" id="uNombre" placeholder="Nombre" />
@@ -106,16 +60,24 @@ export default class FormularioRegistro extends Component{
                             <input onChange={e => this.setState({lastName: e.target.value})} type="text" className="form-control" id="uApellido" placeholder="Apellido" />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="uContra" className="form-label">Contraseña</label>
-                            <input onChange={e => this.setState({contra: e.target.value})} type="password" className="form-control" id="uContra" placeholder="Contraseña"/>
+                            <label htmlFor="uCUI" className="form-label">CUI</label>
+                            <input onChange={e => this.setState({CUI: e.target.value})} type="number" className="form-control" id="uCUI" placeholder="CUI"/>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="uContraC" className="form-label">Confirmar contraseña</label>
-                            <input onChange={e => this.setState({contra2: e.target.value})} type="password" className="form-control" id="uContrac" placeholder="Confirmar contraseña"/>
+                            <label htmlFor="usaldo" className="form-label">saldo</label>
+                            <input onChange={e => this.setState({saldo: e.target.value})} type="number" className="form-control" id="usaldo" placeholder="Saldo inicial de cuenta"/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="ucorreo" className="form-label">correo</label>
+                            <input onChange={e => this.setState({correo: e.target.value})} type="text" className="form-control" id="ucorreo" placeholder="Correo electrónico"/>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="uPassword" className="form-label">password</label>
+                            <input onChange={e => this.setState({password: e.target.value})} type="password" className="form-control" id="uPassword" placeholder="Contraseña"/>
                         </div>
                         <button type="submit" className="btn btn-dark">Registrarse</button>
-                        </form>
-                        <a href="/">Ya tienes una cuenta? logeate</a>
+                    </form>
+                        <a href="/">¿Ya tienes una cuenta? Logueate aquí</a>
                     <div>
                         <br></br>
                     </div>
@@ -129,19 +91,19 @@ export default class FormularioRegistro extends Component{
     _handleSubmit = async(e) =>{
         e.preventDefault();
         console.log('oprimio registarse');
-        this.state.foto = enBase64;
+
         if(this.ComprobacionYMensaje()){
             console.log('registro')
 
-            {// Registrar usuario
+            // Registrar usuario
                 let existe = 0;
                 console.log(this.state)
                 if(existe == 0){
-                    axios.post(url, {username: this.state.userName, nombre: this.state.name, apellido: this.state.lastName, password: this.state.contra, image: enBase64})
+                    axios.post(url, {nombre: this.state.name, apellido: this.state.lastName, CUI: this.state.CUI, saldo: this.state.saldo, correo: this.state.correo, password: this.state.password})
                     .then(response=>{
-                        console.log('response');
+                        console.log('response: ');
                         console.log(response.data);
-                        if(response.data == "error"){
+                        if(response.status >= 400){
                             console.log("error al registrarse");
                             swal({
                                 title: "Error",
@@ -149,11 +111,11 @@ export default class FormularioRegistro extends Component{
                                 icon: "error",
                                 button: "Aceptar"
                             });
-                        }else if(response.data.message == "Usuario registrado :)"){   
+                        }else if(response.status == 202){   
                             console.log("El usuario fue registrado");
                             swal({
                                 title: "Registrado",
-                                text: "Registrado correctamente",
+                                text: "Registrado correctamente, su número de cuenta es el: "+response.data.cuenta,
                                 icon: "success",
                                 button: "Aceptar"
                             })
@@ -169,13 +131,13 @@ export default class FormularioRegistro extends Component{
                 }else{
                     swal({
                         title: "Error",
-                        text: "El nombre de usuario esta ocupado",
+                        text: "La cuenta con este CUI ya esta creada",
                         icon: "error",
                         button: "Aceptar"
                     });
-                    console.log('el usuario ya existe');
+                    console.log('La cuenta ya existe');
                 }
-            }
+            
         }
     }
 

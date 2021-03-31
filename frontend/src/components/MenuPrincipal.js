@@ -11,10 +11,13 @@ export default class MenuPrincipal extends Component {
     toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
     CerrarSesion=()=>{
-        cookiess.remove('userName', {path: "/"});
+
+        cookiess.remove('CUI', {path: "/"});
         cookiess.remove('nombre', {path: "/"});
         cookiess.remove('apellido', {path: "/"});
-        cookiess.remove('contra', {path: "/"});
+        cookiess.remove('saldo', {path: "/"});
+        cookiess.remove('password', {path: "/"});
+        cookiess.remove('correo', {path: "/"});
         window.location.href='./';
     }
 

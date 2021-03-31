@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import swal from 'sweetalert';
 
-const Surl ="https://shrouded-coast-79182.herokuapp.com/login";
+const Surl ="https://infinite-harbor-77648.herokuapp.com/login";
 const cookiess = new Cookies();
 
 export default class FormLogin extends Component {
@@ -13,14 +13,14 @@ export default class FormLogin extends Component {
         //hereda los componentes de react
         super();
         this.state = {
-            username: '',
+            cuenta: '',
             password: ''
         }
     }
 
 
     componentDidMount(){
-        if(cookiess.get('userName')){
+        if(cookiess.get('cuenta')){
             window.location.href='./profile';
         }
     }
@@ -36,7 +36,7 @@ export default class FormLogin extends Component {
     }
 
     IniciarSesion=async()=>{
-        axios.post(Surl, {username: this.state.username, password: this.state.password})
+        axios.post(Surl, {cuenta: this.state.cuenta, password: this.state.password})
         .then(response=>{
             console.log(response.data)
             if(response.status != 202){
@@ -52,7 +52,7 @@ export default class FormLogin extends Component {
                 if(cEntra != contraL){
                     swal({
                         title: "Error",
-                        text: "Usuario/Contraseña incorrectos.",
+                        text: "No. de Cuenta/Contraseña incorrectos.",
                         icon: "error",
                         button: "Aceptar"
                     });
@@ -61,11 +61,12 @@ export default class FormLogin extends Component {
                     console.log(response.data);
                     //variable de sesion con universal cookies.
                     var usuario = response.data;
-                    cookiess.set('username', usuario.username, {path: "/"});
+                    cookiess.set('CUI', usuario.CUI, {path: "/"});
                     cookiess.set('nombre', usuario.nombre, {path: "/"});
                     cookiess.set('apellido', usuario.apellido, {path: "/"});
+                    cookiess.set('saldo', usuario.saldo, {path: "/"});
                     cookiess.set('password', usuario.password, {path: "/"});
-                    cookiess.set('image', usuario.image, {path: "/"});
+                    cookiess.set('correo', usuario.correo, {path: "/"});
                     swal({
                         title: "Bienvenid@",
                         text: ":) Credenciales correctas.",
@@ -118,7 +119,7 @@ export default class FormLogin extends Component {
                     <form onSubmit={this._handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="uUsuario" className="form-label">Usuario</label>
-                            <input onChange={e => this.setState({username: e.target.value})} type="text" className="form-control" id="username" placeholder="Usuario" />
+                            <input onChange={e => this.setState({cuenta: e.target.value})} type="text" className="form-control" id="cuenta" placeholder="No. de Cuenta" />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="uContra" className="form-label">Contraseña</label>
