@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "nodemon": "nodemon --exec npm start"
+    "nodemon": "nodemon --exec npm start",
+    "test": "mocha ./src/test/*.js --timeout 15000",
+    "coverage": "nyc --reporter=text  npm test",
+    "coverage-html": "nyc --reporter=html --reporter=text  npm test"
   },
   "keywords": [],
   "author": "",
