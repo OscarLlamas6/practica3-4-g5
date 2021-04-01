@@ -93,8 +93,8 @@ export default class Profile extends Component {
     }
 
 
-    //EDITAR PERFIL
-    PublicarEstado=async()=>{
+    //REALIZAR TRASNFERENCIA
+    RealizarTransferencia=async()=>{
         console.log(cookiess.get("nombre"))
         console.log(cookiess.get("apellido"))
         console.log(cookiess.get("username"))
@@ -138,10 +138,12 @@ export default class Profile extends Component {
 
     render() {
 
-        let usuario = cookiess.get("username");
+        let cui = cookiess.get("CUI");
         let nombre = cookiess.get("nombre");
         let apellido = cookiess.get("apellido");
-        let foto = cookiess.get("image")
+        let saldo = cookiess.get("saldo");
+        let password = cookiess.get("password");
+        let correo = cookiess.get("correo");
 
         const convertirBase64=(archivos)=>{
             Array.from(archivos).forEach(archivo=>{
@@ -181,8 +183,8 @@ export default class Profile extends Component {
                         <div className="usuario">
                         <div class="container">
                             <div class="row">
-                                <div class="col-8"><h3>Oscar Mazariegos</h3></div>
-                                <div class="col-4"><h5>No. de Cuenta: 37747947969500</h5></div>
+                                <div class="col-8"><h3>{nombre} {apellido}</h3></div>
+                                <div class="col-4"><h5>No. de Cuenta: aquivaLacuenta</h5></div>
                             </div>
                         </div>                        
                         </div>
@@ -194,10 +196,10 @@ export default class Profile extends Component {
                             <div class="row">
                                 <div class="col-8">
                                     <h4>Mis datos:</h4>
-                                    <p>Oscar Eduardo</p>
-                                    <p>Mazariegos Lópes</p>
-                                    <p>2871335160101</p>
-                                    <p>oscarmazariegos@gmail.com</p>
+                                    <p><b>Nombre: </b>{nombre}</p>
+                                    <p><b>Apellido: </b>{apellido}</p>
+                                    <p><b>CUI: </b>{cui}</p>
+                                    <p><b>Correo: </b>{correo}</p>
                                 </div>
                                 <div class="col-4">
                                     <div className="salto2"></div>
@@ -205,7 +207,7 @@ export default class Profile extends Component {
                                     <div className="salto2"></div>
                                     <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modalVerSaldo()}>Consultar Saldo</button>
                                     <div className="salto2"></div>
-                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modaEditarEstado()}>Reporte</button>
+                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modaEditarEstado()}>Generar Reporte</button>
                                 </div>
                             </div>
                         </div>                        
@@ -213,29 +215,30 @@ export default class Profile extends Component {
                     </div>
                 </div>
                 </div>
-
-
                 <Modal isOpen={this.state.modalEditar}>
                     <ModalHeader toggle={this.modaEditarEstado} style={{display: ''}}>
-                    Crear Publicación
+                    Realizar Transferencia
                     </ModalHeader>
                     <ModalBody>
                         <div className="container">
-                            <div className="row">
                                 <div className="col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="userNombre">Publicación</label>
-                                        <textarea className="form-control" rows="5" name="publi" id="publi" placeholder="¿En que estas pensando?..." cols="52" onChange={this.handleChange}></textarea>
-                                        <br></br>
-                                        <input type="file"  accept="image/png, image/jpeg" multiple onChange={(e)=>convertirBase64(e.target.files)}></input>   
+                                    <div>
+                                        <h4>Cuenta Destino: </h4>
+                                        <input  type="text" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="No. Cuenta" onChange={this.handleChange}/>
+                                        <div className="salto"></div>
+                                        <h4>Monto: </h4>
+                                        <input  type="number" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="Q. " onChange={this.handleChange}/>
+                                        <div className="salto"></div>
+                                        <h4>Descripción: </h4>
+                                        <textarea  type="text" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="Descripción de la transferencia" onChange={this.handleChange}/>
                                     </div>
-                            </div>
+                            
                             </div>
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <button className="btn btn-info" onClick={this.PublicarEstado}>
-                            Publicar
+                        <button className="btn btn-info" onClick={this.RealizarTransferencia}>
+                            Transferir
                         </button>
                         <button className="btn btn-dark" onClick={()=>this.modaEditarEstado()}>
                             Cancelar
@@ -253,7 +256,7 @@ export default class Profile extends Component {
                                 <div className="col-md-auto">
                                     <img src="https://www.pngkey.com/png/full/9-97998_download-svg-download-png-billetes-con-alas.png" height="140px"></img>
                                     <h4>Tu saldo actual es:</h4>
-                                    <h4>Q. 12,000.00</h4>
+                                    <h4>Q. {saldo}</h4>
                                     <br></br>
                                 </div>
                             </div>
