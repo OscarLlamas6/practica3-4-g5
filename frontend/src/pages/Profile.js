@@ -14,7 +14,8 @@ import Tarjeta from '../components/Tarjeta';
 
 const cookiess = new Cookies();
 const Surl = "https://shrouded-coast-79182.herokuapp.com/nuevaPublicacion";
-const Purl = "https://shrouded-coast-79182.herokuapp.com/getPublicaciones";
+const TransUrl = "https://infinite-harbor-77648.herokuapp.com/nuevaTransaccion";
+const SaldoUrl = "https://infinite-harbor-77648.herokuapp.com/consultarSaldo ";
 
 
 let enBase64 = '';
@@ -23,20 +24,16 @@ let imagen = user;
 export default class Profile extends Component {
     
     state={
-        data:[],
         modalEditar: false,
         modalAlbum: false,
         modalSaldo: false,
         form:{
-            userName: '',
-            publi: '',
-            image: ''
+            descripcion: '',
+            monto: '',
+            destino: ''
         }, 
-        album:{
-        crearAlbum: '',
-        },
+        saldo: 0,
         publicacionesT: [],
-        miFoto: ''
     };
 
     handleChange=async e=>{
@@ -47,19 +44,8 @@ export default class Profile extends Component {
                 [e.target.name]: e.target.value
             }
         });
-        console.log(this.state.form);
     }
 
-    handleChange2=async e=>{
-        e.persist();
-        await this.setState({
-            album:{
-                ...this.state.album,
-                [e.target.name]: e.target.value
-            }
-        });
-        console.log(this.state.album);
-    }
 
     handleChange3=async e=>{
         e.persist();
@@ -69,7 +55,6 @@ export default class Profile extends Component {
                 [e.target.name]: e.target.value
             }
         });
-        console.log(this.state.eliminar.seleccionado);
     }
 
 
@@ -86,25 +71,23 @@ export default class Profile extends Component {
     }
 
     componentDidMount(){
-        if(!cookiess.get('username')){
-            //window.location.href='./';
+        if(!cookiess.get('cuenta')){
+            window.location.href='./';
         }
+        this.setState({
+            saldo: cookiess.get("saldo")
+        });
         //this.obtenerPublicaciones()
     }
 
 
     //REALIZAR TRASNFERENCIA
     RealizarTransferencia=async()=>{
-        console.log(cookiess.get("nombre"))
-        console.log(cookiess.get("apellido"))
-        console.log(cookiess.get("username"))
-        console.log(this.state.form.publi)
-        console.log(enBase64)
-        axios.post(Surl,{username: cookiess.get("username"), nombre: cookiess.get("nombre"), apellido: cookiess.get("apellido"), contenido: this.state.form.publi, image: enBase64})
+        axios.post(TransUrl,{CuentaOrigen: cookiess.get("cuenta"), CuentaDestino: this.state.form.destino, monto: this.state.monto, descripcion: this.state.form.descripcion})
         .then(response=>{
             swal({
-                title: "Publicacíon",
-                text: "Se creo la publicación correctamente.",
+                title: "Transferencia",
+                text: "Transferencia realizada.",
                 icon: "success",
                 button: "Aceptar",
                 timer: "2000"
@@ -112,7 +95,7 @@ export default class Profile extends Component {
             setTimeout('document.location.reload()',2000);  
         })
         .catch(error=>{
-            console.error("error");
+            console.error(error);
             swal({
                 title: "Error",
                 text: "Ha ocurrido un error.",
@@ -122,8 +105,24 @@ export default class Profile extends Component {
         })
     }
 
-    obtenerPublicaciones=async()=>{
-        axios.get(Purl)
+    //CONSULTAR SALDO
+    consultarSaldo=async()=>{
+        axios.post(SaldoUrl,{cuenta: cookiess.get("cuenta")})
+        .then(response=>{
+            console.log(response.data)
+            cookiess.set('saldo', response.data.saldo, {path: "/"});
+            this.setState({
+                saldo: cookiess.get("saldo")
+            });
+        })
+        .catch(error=>{
+            console.error("error");
+        })
+    }
+
+    //OBTENER TRANSACCIONES
+    obtenerTransacciones=async()=>{
+        axios.get("asdasd")
         .then(response=>{
             const pbl = response.data
             this.setState({
@@ -141,35 +140,9 @@ export default class Profile extends Component {
         let cui = cookiess.get("CUI");
         let nombre = cookiess.get("nombre");
         let apellido = cookiess.get("apellido");
-        let saldo = cookiess.get("saldo");
-        let password = cookiess.get("password");
         let correo = cookiess.get("correo");
-
-        const convertirBase64=(archivos)=>{
-            Array.from(archivos).forEach(archivo=>{
-                var reader = new FileReader();
-                reader.readAsDataURL(archivo);
-                reader.onload=function(){
-                    var aux=[];
-                    var base64 = reader.result;
-                    imagen = base64;
-                    aux = base64.split(',');
-                    enBase64 = aux[1];
-                    var aux2, aux3 = [];
-                    aux2 =aux[0].split('/');
-                    aux3 = aux2[1].split(';');
-                }
-            })
-        }
-
-
-        var pp = this.state.publicacionesT.map(tarjeta => {
-            return (
-            <div key={tarjeta.id}>
-                <Tarjeta usuario={tarjeta.username} imagenPublicacion={tarjeta.image} contenido={tarjeta.contenido} fecha={tarjeta.fecha}/>
-            </div>
-            )
-        });
+        let cuenta = cookiess.get("cuenta");
+        let saldoN = this.state.saldo;
 
         return (
             <div>
@@ -184,7 +157,7 @@ export default class Profile extends Component {
                         <div class="container">
                             <div class="row">
                                 <div class="col-8"><h3>{nombre} {apellido}</h3></div>
-                                <div class="col-4"><h5>No. de Cuenta: aquivaLacuenta</h5></div>
+                                <div class="col-4"><h5>No. de Cuenta: {cuenta}</h5></div>
                             </div>
                         </div>                        
                         </div>
@@ -224,13 +197,13 @@ export default class Profile extends Component {
                                 <div className="col-12">
                                     <div>
                                         <h4>Cuenta Destino: </h4>
-                                        <input  type="text" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="No. Cuenta" onChange={this.handleChange}/>
+                                        <input  type="text" className="form-control" name="destino" id="destino" placeholder="No. Cuenta" onChange={this.handleChange}/>
                                         <div className="salto"></div>
                                         <h4>Monto: </h4>
-                                        <input  type="number" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="Q. " onChange={this.handleChange}/>
+                                        <input  type="number" className="form-control" name="monto" id="monto" placeholder="Q. " onChange={this.handleChange}/>
                                         <div className="salto"></div>
                                         <h4>Descripción: </h4>
-                                        <textarea  type="text" className="form-control" name="cuentaDestino" id="cuentaDestino" placeholder="Descripción de la transferencia" onChange={this.handleChange}/>
+                                        <textarea  type="text" className="form-control" name="descripcion" id="descripcion" placeholder="Descripción de la transferencia" onChange={this.handleChange}/>
                                     </div>
                             
                             </div>
@@ -256,15 +229,15 @@ export default class Profile extends Component {
                                 <div className="col-md-auto">
                                     <img src="https://www.pngkey.com/png/full/9-97998_download-svg-download-png-billetes-con-alas.png" height="140px"></img>
                                     <h4>Tu saldo actual es:</h4>
-                                    <h4>Q. {saldo}</h4>
+                                    <h4>Q. {saldoN}</h4>
                                     <br></br>
                                 </div>
                             </div>
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <button className="btn btn-info" onClick={this.PublicarEstado}>
-                            Consultar
+                        <button className="btn btn-info" onClick={this.consultarSaldo}>
+                            Actualizar
                         </button>
                     </ModalFooter>
                 </Modal>
