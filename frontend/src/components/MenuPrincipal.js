@@ -18,6 +18,7 @@ export default class MenuPrincipal extends Component {
         cookiess.remove('saldo', {path: "/"});
         cookiess.remove('password', {path: "/"});
         cookiess.remove('correo', {path: "/"});
+        cookiess.remove('cuenta', {path: "/"});
         window.location.href='./';
     }
 

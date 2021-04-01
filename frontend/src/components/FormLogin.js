@@ -67,6 +67,7 @@ export default class FormLogin extends Component {
                     cookiess.set('saldo', usuario.saldo, {path: "/"});
                     cookiess.set('password', usuario.password, {path: "/"});
                     cookiess.set('correo', usuario.correo, {path: "/"});
+                    cookiess.set('cuenta', usuario.cuenta, {path: "/"});
                     swal({
                         title: "Bienvenid@",
                         text: ":) Credenciales correctas.",
