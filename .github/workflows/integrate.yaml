@@ -8,6 +8,20 @@ on:
       - develop
 
 jobs:
+
+  frontend_ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10    
+      - run: npm ci
+      - run: npm run test
+
   backend_ci:
     runs-on: ubuntu-latest
     defaults:
