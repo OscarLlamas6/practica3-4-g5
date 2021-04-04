@@ -4,7 +4,6 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Login from '../pages/Login'
 import Profile from '../pages/Profile';
 import Registo from '../pages/Registro';
-import Publicaciones from '../pages/Publicaciones';
 
 
 //rutas creadas LOGIN

@@ -3,17 +3,13 @@ import '../css/Profile.css'
 import Cookies from 'universal-cookie';
 import MenuPrincipal from '../components/MenuPrincipal'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import { ModalTitle } from 'react-bootstrap';
 import axios from 'axios';
-import md5 from 'md5';
 import swal from 'sweetalert';
-import { timers } from 'jquery';
 import user from '../img/user.png';
-import AnimalAvatar from 'animal-avatars.js'
-import Tarjeta from '../components/Tarjeta';
-
+import { Document, Page, Text, View, StyleSheet, ReactPDF } from '@react-pdf/renderer';
+import PDF from '../components/Pdf';
 const cookiess = new Cookies();
-const Surl = "https://shrouded-coast-79182.herokuapp.com/nuevaPublicacion";
+const ReporteT = "https://infinite-harbor-77648.herokuapp.com/reporteTransaccion";
 const TransUrl = "https://infinite-harbor-77648.herokuapp.com/nuevaTransaccion";
 const SaldoUrl = "https://infinite-harbor-77648.herokuapp.com/consultarSaldo ";
 
@@ -21,19 +17,38 @@ const SaldoUrl = "https://infinite-harbor-77648.herokuapp.com/consultarSaldo ";
 let enBase64 = '';
 let imagen = user;
 
+// Create styles
+const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      backgroundColor: '#E4E4E4'
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1
+    }
+});
+
+const modalStyle ={
+    //position: "absolute",
+}
+
 export default class Profile extends Component {
     
     state={
         modalEditar: false,
         modalAlbum: false,
         modalSaldo: false,
+        modalReporte: false,
         form:{
             descripcion: '',
             monto: '',
             destino: ''
         }, 
         saldo: 0,
-        publicacionesT: [],
+        creditos: [],
+        debitos: []
     };
 
     handleChange=async e=>{
@@ -66,6 +81,14 @@ export default class Profile extends Component {
         this.setState({modalSaldo: !this.state.modalSaldo})
     }
 
+    modalVerReporte=()=>{
+        this.setState({modalReporte: !this.state.modalReporte})
+    }
+
+    GenerarReporte=()=>{
+        this.obtenerTransacciones();
+    }
+
     modaEditarAlbum=()=>{
         this.setState({modalAlbum: !this.state.modalAlbum})
     }
@@ -83,7 +106,8 @@ export default class Profile extends Component {
 
     //REALIZAR TRASNFERENCIA
     RealizarTransferencia=async()=>{
-        axios.post(TransUrl,{CuentaOrigen: cookiess.get("cuenta"), CuentaDestino: this.state.form.destino, monto: this.state.monto, descripcion: this.state.form.descripcion})
+        let valor = parseFloat(this.state.form.monto);
+        axios.post(TransUrl,{CuentaOrigen: cookiess.get("cuenta"), CuentaDestino: this.state.form.destino, monto: valor, descripcion: this.state.form.descripcion})
         .then(response=>{
             swal({
                 title: "Transferencia",
@@ -122,15 +146,19 @@ export default class Profile extends Component {
 
     //OBTENER TRANSACCIONES
     obtenerTransacciones=async()=>{
-        axios.get("asdasd")
+        axios.post(ReporteT, {cuenta: cookiess.get('cuenta')})
         .then(response=>{
-            const pbl = response.data
+            console.log(response.data)
             this.setState({
-                publicacionesT: pbl
+                creditos: response.data.creditos
             });
+            this.setState({
+                debitos: response.data.debitos
+            });
+            this.modalVerReporte();
         })
         .catch(error=>{
-            console.error("error");
+            console.error(error);
         })
     }
   
@@ -143,6 +171,44 @@ export default class Profile extends Component {
         let correo = cookiess.get("correo");
         let cuenta = cookiess.get("cuenta");
         let saldoN = this.state.saldo;
+
+        const deb = this.state.debitos.map((item,i)=>{
+            return <table>
+                <tr>
+                    <td key={i}><b>ID:</b> {item.ID} <b>Fecha:</b> {item.fecha}</td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Destino:</b> {item.CuentaDestino} <b>Origen:</b> {item.CuentaOrigen}</td>
+                    <td key={i}></td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Monto:</b> {item.monto}</td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Descripción:</b> {item.descripcion}</td>
+                </tr>
+                <br></br>
+            </table>
+        });
+
+        const cre = this.state.creditos.map((item,i)=>{
+            return <table>
+                <tr>
+                    <td key={i}><b>ID:</b> {item.ID} <b>Fecha:</b> {item.fecha}</td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Destino:</b> {item.CuentaDestino} <b>Origen:</b> {item.CuentaOrigen}</td>
+                    <td key={i}></td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Monto:</b> {item.monto}</td>
+                </tr>
+                <tr>
+                    <td key={i}><b>Descripción:</b> {item.descripcion}</td>
+                </tr>
+                <br></br>
+            </table>
+        });
 
         return (
             <div>
@@ -180,7 +246,7 @@ export default class Profile extends Component {
                                     <div className="salto2"></div>
                                     <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modalVerSaldo()}>Consultar Saldo</button>
                                     <div className="salto2"></div>
-                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.modaEditarEstado()}>Generar Reporte</button>
+                                    <button type="button" className="btn btn-dark btn-lg btni" onClick={()=>this.GenerarReporte()}>Generar Reporte</button>
                                 </div>
                             </div>
                         </div>                        
@@ -240,6 +306,15 @@ export default class Profile extends Component {
                             Actualizar
                         </button>
                     </ModalFooter>
+                </Modal>
+
+                <Modal size='lg' style={modalStyle} isOpen={this.state.modalReporte}>
+                    <ModalHeader toggle={this.modalVerReporte} style={{display: ''}}>
+                    Reportes
+                    </ModalHeader>
+                    <ModalBody>
+                        <PDF c={cre} d={deb}/>
+                    </ModalBody>
                 </Modal>
             </div>
         );
