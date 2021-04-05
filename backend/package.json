@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node ./index.js",
     "nodemon": "nodemon --exec npm start",
-    "test": "mocha ./src/test/*.js --timeout 15000",
+    "test": "mocha ./src/test/*.js --timeout 15000 --silent --exit",
     "test-normal": "mocha ./src/test/generarFecha.test.js --timeout 15000 --silent",
-    "test-http": "mocha ./src/test/apiRequests.test.js --timeout 15000 --silent",
+    "test-http": "mocha ./src/test/apiRequests.test.js --timeout 15000 --silent --exit",
     "coverage": "nyc --reporter=text  npm test",
     "coverage-html": "nyc --reporter=html --reporter=text  npm test"
   },
