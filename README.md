@@ -26,8 +26,9 @@ En el siguiente diagrama se observa la arquitectura a utilizar para construir el
 
 ![](img/arquitectura.png)
 
-## Casos de Prueba
-### Backend
+# Casos de Prueba
+
+## **Backend**
 <table>
 <tr style="text-align:center;">
     <td>Descripción</td>
@@ -108,5 +109,323 @@ describe("testeando generarFecha: ", function() {
 </tr>
 </table>
 
-### Frontend
+## **Frontend**
+<table>
+<tr style="text-align:center;">
+    <td>Descripción</td>
+    <td>Prueba Unitaria</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Compontes utilizados en las paginas. <br><br>
+Todos los componentes deben de crearse correctamente.
+</td>
+<td>
+
+  ```js
+describe('Test para los componentes de la aplicación.', ()=>{
+    it('Menu se Renderizá sin error', ()=>{
+        const wrapper = shallow(<Menu/>);
+        expect(wrapper).toHaveLength(1);
+    })
+
+    it('Menu Principal se Renderizá sin error', ()=>{
+        const wrapper = shallow(<MenuPrincipal/>);
+        expect(wrapper).toHaveLength(1);
+    })
+
+    it('Formulario Login se Renderizar sin error', ()=>{
+        const wrapper = shallow(<FormLogin/>);
+        expect(wrapper).toHaveLength(1);
+    })
+
+    it('Formulario Registro se Renderizá sin error', ()=>{
+        const wrapper = shallow(<FormularioRegistro/>);
+        expect(wrapper).toHaveLength(1);
+    })
+
+    it('Pdf se Renderizá sin error', ()=>{
+        const wrapper = shallow(<PDF/>);
+        expect(wrapper).toHaveLength(1);
+    })
+})
+
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Formularios en la pagina de login y registro. <br><br>
+Los formularios deben de aparecer en el centro de la pagina
+</td>
+<td>
+
+  ```js
+describe('Formularios creados correctamente.', ()=>{
+    it('Formulario Login debe centrar su contenido.', ()=>{
+        expect(shallow(<FormLogin/>).is('.text-center')).toBe(true);
+    })
+
+    it('Formulario Registro debe centrar su contenido.', ()=>{
+        expect(shallow(<FormularioRegistro/>).is('.text-center')).toBe(true);
+    })
+})
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+El menu debera de contener el titulo correcto.
+</td>
+<td>
+
+  ```js
+describe('Debe aparecer el titulo de la pagina', ()=>{
+    it('Debe tener el titulo analisis', () =>{
+        expect(true);
+        render(<Menu/>);
+
+        expect(screen.queryByText(/analisis/i)).toBeInTheDocument();
+    })
+    it('Debe tener el titulo diseño', () =>{
+        expect(true);
+        render(<Menu/>);
+
+        expect(screen.queryByText(/diseño/i)).toBeInTheDocument();
+    })
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+La pagina de perfil tiene que mostrar los datos correctos.
+</td>
+<td>
+
+  ```js
+describe('Pagina profile', ()=>{
+    it('debe mostrar texto: mis datos', () =>{
+        render(<Profile/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/mis datos/i)).toBeInTheDocument()
+    })
+
+    it('Debe tener boton transferencia', () =>{
+        render(<Profile/>)
+
+        expect(
+            screen.getByRole(
+                'button', 
+                {
+                    name: /realizar transferencia/i
+                }
+            )
+        ).toBeInTheDocument();
+    })
+
+    it('Debe tener boton saldo', () =>{
+        render(<Profile/>)
+
+        expect(
+            screen.getByRole(
+                'button', 
+                {
+                    name: /saldo/i
+                }
+            )
+        ).toBeInTheDocument();
+    })
+
+    it('Debe tener boton reporte', () =>{
+        render(<Profile/>)
+
+        expect(
+            screen.getByRole(
+                'button', 
+                {
+                    name: /generar reporte/i
+                }
+            )
+        ).toBeInTheDocument();
+    })
+
+    it('Debe mostart nombre', () =>{
+        let a = render(<Profile/>)
+        // /expresion regular/ i -> ignore case 
+        expect(screen.queryByText(/nombre/i)).toBeInTheDocument()
+    })
+
+    it('Debe mostart apellido', () =>{
+        let a = render(<Profile/>)
+        // /expresion regular/ i -> ignore case 
+        expect(screen.queryByText(/apellido/i)).toBeInTheDocument()
+    })
+
+    it('Debe mostart cui', () =>{
+        let a = render(<Profile/>)
+        // /expresion regular/ i -> ignore case 
+        expect(screen.queryByText(/cui/i)).toBeInTheDocument()
+    })
+
+    it('Debe mostart correo', () =>{
+        let a = render(<Profile/>)
+        // /expresion regular/ i -> ignore case 
+        expect(screen.queryByText(/correo/i)).toBeInTheDocument()
+    })
+});
+  ```
+</td>
+</tr>
+
+<tr>
+<td style="text-align:center;">
+El registro debe de mostrar los labels indicados y el boton para registrar.
+</td>
+<td>
+
+  ```js
+describe('Pagina registro', ()=>{
+    it('debe de pedir nombre', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/nombre/i)).toBeInTheDocument()
+    })
+
+    it('debe tener textbox de nombre', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'textbox', 
+                { name: /nombre/i }
+            )
+       ).toBeInTheDocument();
+    })
+
+    it('debe de pedir apellido', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/apellido/i)).toBeInTheDocument()
+    })
+
+    it('debe tener textbox de apellido', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'textbox', 
+                { name: /nombre/i }
+            )
+       ).toBeInTheDocument();
+    })
+
+    it('debe de pedir cui', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/cui/i)).toBeInTheDocument()
+    })
+
+    it('debe tener textbox de cui', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'spinbutton', 
+                { name: /cui/i }
+            )
+       ).toBeInTheDocument();
+    })
+
+    it('debe de pedir saldo', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/saldo/i)).toBeInTheDocument()
+    })
+
+    it('debe tener textbox de saldo', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'spinbutton', 
+                { name: /saldo/i }
+            )
+       ).toBeInTheDocument();
+    })
+
+    it('debe de pedir correo', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/correo/i)).toBeInTheDocument()
+    })
+
+    it('debe tener textbox de correo', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'textbox', 
+                { name: /correo/i }
+            )
+       ).toBeInTheDocument();
+    })
+
+    it('debe de pedir password', () =>{
+        render(<Registro/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/password/i)).toBeInTheDocument()
+    })
+
+    it('Debe tener boton de registro', () =>{
+        render(<Registro/>)
+
+        expect(
+            screen.getByRole(
+                'button', 
+                {
+                    name: /registrarse/i
+                }
+            )
+        ).toBeInTheDocument();
+    })
+
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Debe de aparecer el label "no. de cuenta".
+</td>
+<td>
+
+  ```js
+describe('Pagina profile', ()=>{
+    it('debe poder publicar', () =>{
+        render(<Profile/>)
+        // Debe tener label de datos
+        expect(screen.queryByText(/no. de cuenta:/i)).toBeInTheDocument()
+    })
+});
+  ```
+</td>
+</tr>
+</table>
+
 ## Anexos
+### Capturas de pantalla ###
+### *Pagina de login* ###
+![](img/login.png)
+### *Pagina de registro* ###
+![](img/registro.png)
+### *Pagina de perfil* ###
+![](img/perfil.png)
+### *Ventana para consultar saldo.* ###
+![](img/saldo.png)
+### *Ventana para realizar transferencia.* ###
+![](img/transferencia.png)
+### *Ventana para generar reporte.* ###
+![](img/reporte.png)
+
+
