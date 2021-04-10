@@ -7,7 +7,7 @@ const router = Router();
 const { generarFecha } = require('../generarFecha');
 
 router.get('/', (req, res) => {
-    res.json({'Resultado': 'API AYD1: Practica 3 y 4 - Grupo 5! :D'});
+    res.json({'Resultado': 'API AYD1: Practica 3 y 4 - Grupo 5 :D'});
 });
 
 router.post("/nuevoUsuario", async (req, res) => {
