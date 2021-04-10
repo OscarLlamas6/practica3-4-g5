@@ -55,7 +55,7 @@ router.post("/nuevoUsuario", async (req, res) => {
                     res.status(202);
                     res.json({ cuenta : cuenta });  
                 } else {
-                    res.status(202);
+                    res.status(404);
                     res.json({ message : 'Ya existe un usuario registrado con ese CUI :('});
                 }
             }});
@@ -182,31 +182,49 @@ router.post('/reporteTransaccion', async (req, res) => {
         const data = req.body;
         var debitos, creditos;
 
-        await Transaccion.find({ CuentaOrigen: data.cuenta}, function (err, deb) {
-            if (err){ 
-                console.log(err)
-                res.status(404);
-                res.send({ message : err }); 
-                console.log("Error al obtener transacciones :c");
-            } else{ 
-                console.log("Debitos obtenidos correctamente :D");
-                debitos = deb;
-            } 
-        }); 
 
-        await Transaccion.find({ CuentaDestino: data.cuenta}, function (err, cred) {
+        await Usuario.findOne({ cuenta: data.cuenta }, async function (err, docs) { 
+
             if (err){ 
                 console.log(err)
                 res.status(404);
                 res.send({ message : err }); 
-                console.log("Error al obtener transacciones :c");
+                console.log("Usuario no existente :c");
+            } else if (docs == null) {
+                res.status(404);
+                res.send({ message : "Usuario no existente :c" }); 
+                console.log("Usuario no existente :c");
             } else{ 
-                console.log("Creditos obtenidos correctamente :D");
-                creditos = cred;
+                
+                await Transaccion.find({ CuentaOrigen: data.cuenta}, function (err, deb) {
+                    if (err){ 
+                        console.log(err)
+                        res.status(404);
+                        res.send({ message : err }); 
+                        console.log("Error al obtener transacciones :c");
+                    } else{ 
+                        console.log("Debitos obtenidos correctamente :D");
+                        debitos = deb;
+                    } 
+                }); 
+        
+                await Transaccion.find({ CuentaDestino: data.cuenta}, function (err, cred) {
+                    if (err){ 
+                        console.log(err)
+                        res.status(404);
+                        res.send({ message : err }); 
+                        console.log("Error al obtener transacciones :c");
+                    } else{ 
+                        console.log("Creditos obtenidos correctamente :D");
+                        creditos = cred;
+                    } 
+                }); 
+
+                res.status(202);
+                res.json({"creditos": JSON.parse(JSON.stringify(creditos)), "debitos": JSON.parse(JSON.stringify(debitos))});
+                            
             } 
-        }); 
-        res.status(202);
-        res.json({"creditos": JSON.parse(JSON.stringify(creditos)), "debitos": JSON.parse(JSON.stringify(debitos))});
+        });
         
     } catch (error) {
         console.log(error)
