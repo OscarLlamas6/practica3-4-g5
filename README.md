@@ -31,21 +31,18 @@ En el siguiente diagrama se observa la arquitectura a utilizar para construir el
 ## **Backend**
 <table>
 <tr style="text-align:center;">
-    <td>Descripción</td>
+    <td>Caso de Prueba</td>
     <td>Prueba Unitaria</td>
 </tr>
 <tr>
-<td style="text-align:center;">
-Ingreso de sesión de un usuario a banca en línea con credenciales correctas. <br><br>
-Para este caso, se espera un estado 202 que es el que da acceso a la plataforma.
-</td>
+<td>¿Qué pasaría si el usuario intenta entrar a la plataforma? <br>
+¿Qué pasaría si sus credenciales son correctas? Según el método se esperaría un status 202.</td>
 <td>
 
   ```js
 describe('login as a user: ',()=>{
     it('should login', (done) => {
-        chai.request(app)
-        .post('/login')
+        chai.request(app).post('/login')
         .send({ cuenta: "37747947969500", password: "123456789"})
         .end( function(err,res){
             if (err){
@@ -62,10 +59,8 @@ describe('login as a user: ',()=>{
 </td>
 </tr>
 <tr>
-<td style="text-align:center;">
-Ingreso de sesión de un usuario a banca en línea con credenciales incorrectas. <br><br>
-Para este caso, se espera un estado 404 que es el que niega el acceso a la plataforma.
-</td>
+<td>¿Qué pasaría si el usuario desea ingresar a la plataforma? <br>
+¿Qué pasaría si el usuario provee algún dato erróneo al ingresar a la plataforma? Según el método se esperaría un status 404.</td>
 <td>
 
   ```js
@@ -90,15 +85,310 @@ describe('login as a user: ',()=>{
 </tr>
 <tr>
 <td style="text-align:center;">
-Este método se encarga de generar la fecha actual y devolver en tipo String. <br><br>
-Dado el caso, la prueba unitaria comprueba que el tipo que devuelva sea el correcto.
+¿Qué pasaría si un usuario que no tiene cuenta desea ingresar a la plataforma?
+<br>
+¿Qué pasaría si el CUI no pertenece a ningún otro usuario existente? Según el método se esperaría un status 202.
+</td>
+<td>
+
+  ```js
+describe('Register new user: ',()=>{
+    it(`Should register a new user`, (done) => {
+        chai.request(app)
+        .post('/nuevoUsuario')
+        .send({
+            nombre: "Usuario",
+            apellido: "Prueba",
+            CUI: "2448618884917871",
+            saldo: 175000,
+            correo: "usuario@gmail.com",
+            password: "123456781"
+        })
+        .end( function(err,res){
+            if (err){
+                console.log(err);
+            } else {
+                console.log(res.body)
+                expect(res).to.have.status(202);
+                done();
+            }
+        });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si un usuario que no tiene cuenta desea registrarse en la plataforma? <br>
+¿Qué pasaría si el CUI con el que desea registrarse ya ha sido utilizado antes? Según el método se esperaría un status 404
+</td>
+<td>
+
+  ```js
+describe('Register new user: ',()=>{
+    it(`Shouldn't register a new user`, (done) => {
+    chai.request(app)
+    .post('/nuevoUsuario')
+    .send({
+        nombre: "Usuario",
+        apellido: "Prueba 2",
+        CUI: "3448688500106",
+        saldo: 175000,
+        correo: "usuario2@gmail.com",
+        password: "123456781"
+    })
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(404);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener la información de cierto usuario?<br>
+¿Qué pasaría si el usuario del cual se solicita información existe? Según el método se esperaría un status 202.
+</td>
+<td>
+
+  ```js
+describe('Get profile: ',()=>{
+    it('should get profile', (done) => {
+    chai.request(app)
+    .post('/login')
+    .send({ cuenta: "05522194828065", password: "123456789"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(202);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener información de un usuario en particular? <br>
+¿Qué pasaría si el usuario del que se solicitó la información no está registrado en el sistema? Según el método se esperaría un status 404.
+</td>
+<td>
+
+  ```js
+describe('Get profile: ',()=>{
+    it(`Shouldn't get profile`, (done) => {
+    chai.request(app)
+    .post('/login')
+    .send({ cuenta: "37747947969500", password: "123456781"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(404);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener el saldo actual de la base de datos de cierto usuario? <br>
+¿Qué pasaría si el CUI enviado sí pertenece a un usuario ya registrado? Según el método se esperaría un status 202.
+</td>
+<td>
+
+  ```js
+describe('Check balance: ',()=>{
+    it('Should get user balance', (done) => {
+    chai.request(app)
+    .post('/consultarSaldo')
+    .send({ cuenta: "37747947969500"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(202);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener el saldo actual de la base de datos de cierto usuario? <br>
+¿Qué pasaría si el CUI enviado no pertenece a un usuario ya registrado? Según el método se esperaría un status 404.
+</td>
+<td>
+
+  ```js
+describe('Check balance: ',()=>{
+    it(`Shouldn't get user balance`, (done) => {
+    chai.request(app)
+    .post('/consultarSaldo')
+    .send({ cuenta: "3774794796951155"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(404);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si un usuario desea realizar un nuevo movimiento en su cuenta? <br>
+¿Qué pasaría si la cuenta de origen si existe registrada en la base de datos? Según el método se esperaría un status 202. <br>
+¿Qué pasaría si la cuenta a la cual se desea abonar si existe registrada en la base de datos? Según el método se esperaría un status 202.
+</td>
+<td>
+
+  ```js
+describe('New transaction: ',()=>{
+    it('Should register a new transaction', (done) => {
+    chai.request(app)
+    .post('/nuevaTransaccion')
+    .send({ 
+        CuentaOrigen:"37747947969500",
+        CuentaDestino:"05522194828065",
+        monto: 1000, 
+        descripcion: "Transaccion exitosa :D"
+    })
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(202);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener el saldo actual de la base de datos de cierto usuario? <br>
+¿Qué pasaría si la cuenta de origen y/o la de destino no está registrada en la base de datos? Según el método se esperaría un status 404.
+</td>
+<td>
+
+  ```js
+describe('New transaction: ',()=>{
+    it(`Shouldn't register a new transaction`, (done) => {
+    chai.request(app)
+    .post('/nuevaTransaccion')
+    .send({ 
+        CuentaOrigen:"37747947969500",
+        CuentaDestino:"055221948280621",
+        monto: 1000
+    })
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log(res.body)
+            expect(res).to.have.status(404);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener el reporte de débitos y créditos de la cuenta de un usuario en particular? <br>
+¿Qué pasaría si el CUI enviado como parámetro de un usuario sí está relacionado con una cuenta en la base de datos? Según el método se esperaría un status 202.
+</td>
+<td>
+
+  ```js
+describe('Get transactions report: ',()=>{
+    it('Should get user transactions report', (done) => {
+    chai.request(app)
+    .post('/reporteTransaccion')
+    .send({ cuenta: "37747947969500"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log("Se ha obtenido el reporte de transacciones exitosamente.")
+            expect(res).to.have.status(202);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+¿Qué pasaría si se desea obtener el reporte de débitos y créditos de la cuenta de un usuario en particular? <br>
+¿Qué pasaría si el CUI enviado como parámetro de un usuario no está relacionado con una cuenta en la base de datos? Según el método se esperaría un status 404.
+</td>
+<td>
+
+  ```js
+describe('Get transactions report: ',()=>{
+    it(`Shouldn't get user transactions report`, (done) => {
+    chai.request(app)
+    .post('/reporteTransaccion')
+    .send({ cuenta: "37747947969501"})
+    .end( function(err,res){
+        if (err){
+            console.log(err);
+        } else {
+            console.log("Error al obtener reporte de transacciones exitosamente.")
+            expect(res).to.have.status(404);
+            done();
+        }
+    });
+    });
+});
+  ```
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Este método se encarga de generar la fecha actual y devolver en tipo String. <br>
 </td>
 <td>
 
   ```js
 describe("testeando generarFecha: ", function() {
     describe("Validando fecha: ", function() {
-        it("Check the returned value using: assert.equal(value,'value'): ", function() {
+        it("Check the returned value using: assert.equal(value,'value'): ", 
+        function() {
             result   = fecha.generarFecha();
             assert.typeOf(result, 'string');
         });
