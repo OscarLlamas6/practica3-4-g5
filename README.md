@@ -406,7 +406,8 @@ describe("testeando generarFecha: ", function() {
 <tr>
 <td style="text-align:center;">
 Compontes utilizados en las paginas. <br><br>
-Todos los componentes deben de crearse correctamente.
+¿Qué pasaría si el usuario intenta entrar a la pagina?
+¿Qué pasaría si todos los componentes utilizados cargan de forma correcta? Se espera que los componentes cargen sin ningun tipo de error.
 </td>
 <td>
 
@@ -444,7 +445,8 @@ describe('Test para los componentes de la aplicación.', ()=>{
 <tr>
 <td style="text-align:center;">
 Formularios en la pagina de login y registro. <br><br>
-Los formularios deben de aparecer en el centro de la pagina
+¿Qué pasaría si el usuario intenta acceder a la pagina de login y registro?
+¿Qué pasaría si todos los componentes estan centrados en la pagina? Se espera que los componentes de login y registro esten ubicados en el centro.
 </td>
 <td>
 
@@ -463,7 +465,7 @@ describe('Formularios creados correctamente.', ()=>{
 </tr>
 <tr>
 <td style="text-align:center;">
-El menu debera de contener el titulo correcto.
+¿Qué pasaría si el usuario desea ver la menu var? Se espera que el titulo sea el correcto.
 </td>
 <td>
 
@@ -487,7 +489,7 @@ describe('Debe aparecer el titulo de la pagina', ()=>{
 </tr>
 <tr>
 <td style="text-align:center;">
-La pagina de perfil tiene que mostrar los datos correctos.
+¿Qué pasaría si la pagina de perfil muestra los textos correctamente? Se espera que los datos a mostrar sean pertenecientes al usuario.
 </td>
 <td>
 
@@ -568,7 +570,7 @@ describe('Pagina profile', ()=>{
 
 <tr>
 <td style="text-align:center;">
-El registro debe de mostrar los labels indicados y el boton para registrar.
+¿Qué pasaría si el componte de registro muestra los labels correctos? Se espera que el label de cada textfield sea el indicado.
 </td>
 <td>
 
@@ -684,7 +686,7 @@ describe('Pagina registro', ()=>{
 </tr>
 <tr>
 <td style="text-align:center;">
-Debe de aparecer el label "no. de cuenta".
+¿Qué pasaría si el perfil muestra el label "no. de cuenta"? Se espera que el label "no. de cuenta" sea creado correctamente.
 </td>
 <td>
 
@@ -703,17 +705,23 @@ describe('Pagina profile', ()=>{
 
 ## Anexos
 ### Capturas de pantalla ###
+
 ### *Pagina de login* ###
-![](img/login.png)
+<img src="./img/login.PNG"/>
+
 ### *Pagina de registro* ###
-![](img/registro.png)
+<img src="./img/registro.PNG"/>
+
 ### *Pagina de perfil* ###
-![](img/perfil.png)
+<img src="./img/perfil.PNG"/>
+
 ### *Ventana para consultar saldo.* ###
-![](img/saldo.png)
+<img src="./img/saldo.PNG"/>
+
 ### *Ventana para realizar transferencia.* ###
-![](img/transferencia.png)
+<img src="./img/transferencia.PNG"/>
+
 ### *Ventana para generar reporte.* ###
-![](img/reporte.png)
+<img src="./img/reporte.PNG"/>
 
 
