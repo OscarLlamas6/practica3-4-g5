@@ -341,7 +341,6 @@ describe('Get transactions report: ',()=>{
         if (err){
             console.log(err);
         } else {
-            console.log("Se ha obtenido el reporte de transacciones exitosamente.")
             expect(res).to.have.status(202);
             done();
         }
@@ -368,7 +367,6 @@ describe('Get transactions report: ',()=>{
         if (err){
             console.log(err);
         } else {
-            console.log("Error al obtener reporte de transacciones exitosamente.")
             expect(res).to.have.status(404);
             done();
         }
