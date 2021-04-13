@@ -1,9 +1,10 @@
-# Manual Técnico
+# Práctica 3: Manual Técnico
 Análisis y Diseño de Sistemas 1
 
 Grupo 5
 ---
 Integrantes
+
 |Carné | Nombre |
 |:----:|:----:|
 |201602625| Oscar Alfredo Llamas Lemus|
@@ -20,6 +21,7 @@ Integrantes
     * [BackEnd](#backend)
     * [FrontEnd](#frontend)
 * [Anexos](#anexos)
+    * [Capturas de pantalla de la aplicación](#capturas-de-pantalla)
 
 ## Diagrama de Arquitectura
 En el siguiente diagrama se observa la arquitectura a utilizar para construir el software requerido.
@@ -706,16 +708,16 @@ describe('Pagina profile', ()=>{
 ## Anexos
 ### Capturas de pantalla ###
 ### *Pagina de login* ###
-![](img/login.png)
+![](img/login.PNG)
 ### *Pagina de registro* ###
-![](img/registro.png)
+![](img/registro.PNG)
 ### *Pagina de perfil* ###
-![](img/perfil.png)
+![](img/perfil.PNG)
 ### *Ventana para consultar saldo.* ###
-![](img/saldo.png)
+![](img/saldo.PNG)
 ### *Ventana para realizar transferencia.* ###
-![](img/transferencia.png)
+![](img/transferencia.PNG)
 ### *Ventana para generar reporte.* ###
-![](img/reporte.png)
+![](img/reporte.PNG)
 
 
