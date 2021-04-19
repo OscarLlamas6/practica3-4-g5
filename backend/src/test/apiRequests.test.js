@@ -234,4 +234,21 @@ describe('Testing API REST', function(){
             });
         });
 
+        describe('Delete user: ',()=>{
+            it(`Should delete specific user`, (done) => {
+            chai.request(app)
+            .post('/eliminarUsuario')
+            .send({ CUI: "2448618884917871" })
+            .end( function(err,res){
+                if (err){
+                    console.log(err);
+                } else {
+                    console.log(res.body)
+                    expect(res).to.have.status(202);
+                    done();
+                }
+            });
+            });
+        });
+
 });
