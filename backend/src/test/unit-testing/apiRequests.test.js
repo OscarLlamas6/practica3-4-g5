@@ -1,5 +1,5 @@
-let { app } = require('../../index');
-const { main } = require('../../index');
+let { app } = require('../../../index');
+const { main } = require('../../../index');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
@@ -29,54 +29,6 @@ describe('Testing API REST', function(){
             chai.request(app)
             .post('/login')
             .send({ cuenta: "37747947969500", password: "123456781"})
-            .end( function(err,res){
-                if (err){
-                    console.log(err);
-                } else {
-                    console.log(res.body)
-                    expect(res).to.have.status(404);
-                    done();
-                }
-            });
-            });
-        });
-
-        describe('Register new user: ',()=>{
-            it(`Should register a new user`, (done) => {
-            chai.request(app)
-            .post('/nuevoUsuario')
-            .send({
-                nombre: "Usuario",
-                apellido: "Prueba",
-                CUI: "2448618884917871",
-                saldo: 175000,
-                correo: "usuario@gmail.com",
-                password: "123456781"
-            })
-            .end( function(err,res){
-                if (err){
-                    console.log(err);
-                } else {
-                    console.log(res.body)
-                    expect(res).to.have.status(202);
-                    done();
-                }
-            });
-            });
-        });
-
-        describe('Register new user: ',()=>{
-            it(`Shouldn't register a new user`, (done) => {
-            chai.request(app)
-            .post('/nuevoUsuario')
-            .send({
-                nombre: "Usuario",
-                apellido: "Prueba 2",
-                CUI: "3448688500106",
-                saldo: 175000,
-                correo: "usuario2@gmail.com",
-                password: "123456781"
-            })
             .end( function(err,res){
                 if (err){
                     console.log(err);

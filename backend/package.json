@@ -6,16 +6,20 @@
   "scripts": {
     "start": "node ./index.js",
     "nodemon": "nodemon --exec npm start",
-    "test": "mocha ./src/test/*.js --timeout 15000 --silent --exit",
+    "test": "mocha ./src/test/unit-testing/*.js --timeout 15000 --silent --exit",
     "test-normal": "mocha ./src/test/generarFecha.test.js --timeout 15000 --silent",
     "test-http": "mocha ./src/test/apiRequests.test.js --timeout 15000 --silent --exit",
     "coverage": "nyc --reporter=text  npm test",
-    "coverage-html": "nyc --reporter=html --reporter=text  npm test"
+    "coverage-html": "nyc --reporter=html --reporter=text  npm test",
+    "cucumber": "node ./node_modules/cucumber/bin/cucumber-js ./src/test/BDD -f ./node_modules/cucumber-pretty",
+    "cucumber-html": "node ./node_modules/cucumber/bin/cucumber-js ./src/test/BDD --format=json > salida.json",
+    "cucumber-report": "node report.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
@@ -23,9 +27,13 @@
     "mocha": "^8.3.2",
     "mongoose": "^5.12.2",
     "morgan": "^1.10.0",
+    "pm2": "^4.5.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "cucumber": "^6.0.5",
+    "cucumber-html-reporter": "^5.4.0",
+    "cucumber-pretty": "^6.0.0",
     "nodemon": "^2.0.7"
   }
 }
