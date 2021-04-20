@@ -1,5 +1,5 @@
-let { app } = require('../../index');
-const { main } = require('../../index');
+let { app } = require('../../../index');
+const { main } = require('../../../index');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
