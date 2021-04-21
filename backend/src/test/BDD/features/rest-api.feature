@@ -1,3 +1,4 @@
+  
 Feature: Testeando API-REST 
 
     In order manage directory
@@ -13,5 +14,4 @@ Feature: Testeando API-REST
             | account        | password  | status |
             | 37747947969500 | 123456789 | 202    |
             | 37747947969500 | 123456781 | 404    |
-
 

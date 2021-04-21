@@ -2,7 +2,7 @@ const assert = require("assert");
 const { Given, When, Then } = require("cucumber");
 let restHelper = require("../../../../utils/restHelper");
 
-Given('a user with account number: {string} and password: {string}', function (account, password) {
+Given('an user with account number: {string} and password: {string}', function (account, password) {
 
   myCredentials = { "cuenta": account, "password": password };
   this.today = JSON.parse(JSON.stringify(myCredentials));
