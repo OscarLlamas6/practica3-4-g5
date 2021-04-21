@@ -153,7 +153,7 @@ describe('Testing API REST', function(){
         });
 
         describe('Get transactions report: ',()=>{
-            it('Should get user transactions report', (done) => {
+            it('Should get user transactions report', () => {
             chai.request(app)
             .post('/reporteTransaccion')
             .send({ cuenta: "37747947969500"})
@@ -163,14 +163,13 @@ describe('Testing API REST', function(){
                 } else {
                     console.log("Se ha obtenido el reporte de transacciones exitosamente.")
                     expect(res).to.have.status(202);
-                    done();
                 }
             });
             });
         });
         
         describe('Get transactions report: ',()=>{
-            it(`Shouldn't get user transactions report`, (done) => {
+            it(`Shouldn't get user transactions report`, () => {
             chai.request(app)
             .post('/reporteTransaccion')
             .send({ cuenta: "37747947969501"})
@@ -180,7 +179,6 @@ describe('Testing API REST', function(){
                 } else {
                     console.log("Error al obtener reporte de transacciones exitosamente.")
                     expect(res).to.have.status(404);
-                    done();
                 }
             });
             });
