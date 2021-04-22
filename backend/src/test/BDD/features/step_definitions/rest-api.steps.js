@@ -10,7 +10,7 @@ Given('an user with account number: {string} and password: {string}', function (
 });
 
 When('I send POST request to /login', async function () {
-  this.actualAnswer = await restHelper.postData(`http://127.0.0.1:4000/login`, this.today);
+  this.actualAnswer = await restHelper.postData(`http://0.0.0.0:4000/login`, this.today);
 })
 
 Then('I get response code: {string}', async function (code) {
