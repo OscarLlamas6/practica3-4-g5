@@ -41,6 +41,7 @@ export default class Profile extends Component {
         modalAlbum: false,
         modalSaldo: false,
         modalReporte: false,
+        modalResumen: false,
         form:{
             descripcion: '',
             monto: '',
@@ -91,6 +92,10 @@ export default class Profile extends Component {
 
     modaEditarAlbum=()=>{
         this.setState({modalAlbum: !this.state.modalAlbum})
+    }
+
+    modalVerResumen=()=>{
+        this.setState({modalResumen: !this.state.modalResumen})
     }
 
     componentDidMount(){
@@ -276,8 +281,8 @@ export default class Profile extends Component {
                         </div>
                     </ModalBody>
                     <ModalFooter>
-                        <button className="btn btn-info" onClick={this.RealizarTransferencia}>
-                            Transferir
+                        <button className="btn btn-info" onClick={this.modalVerResumen}>
+                            Verificar
                         </button>
                         <button className="btn btn-dark" onClick={()=>this.modaEditarEstado()}>
                             Cancelar
@@ -315,6 +320,30 @@ export default class Profile extends Component {
                     <ModalBody>
                         <PDF c={cre} d={deb}/>
                     </ModalBody>
+                </Modal>
+
+                <Modal isOpen={this.state.modalResumen}>
+                    <ModalHeader toggle={this.modalVerResumen} style={{display: ''}}>
+                    Resumen Transacción
+                    </ModalHeader>
+                    <ModalBody>
+                        <div className="container">
+                            <div className="row justify-content-md-center">
+                                <div className="col-md-auto">
+                                    <h3>¿Desea realizar la siguiente transacción?</h3>
+                                    <p><b>Cuenta destino:</b> {this.state.form.destino}</p>
+                                    <p><b>Monto:</b> Q.{this.state.form.monto}</p>
+                                    <p><b>Descripcion:</b> </p>
+                                    <p>    {this.state.form.descripcion}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+                        <button className="btn btn-info" onClick={this.RealizarTransferencia}>
+                            Confirmar Transacción
+                        </button>
+                    </ModalFooter>
                 </Modal>
             </div>
         );
