@@ -2,7 +2,7 @@ const assert = require("assert");
 const { Given, When, Then } = require("cucumber");
 let restHelper = require("../../../../utils/restHelper");
 
-Given('a user with account number: {string} and password: {string}', function (account, password) {
+Given('an user with account number: {string} and password: {string}', function (account, password) {
 
   myCredentials = { "cuenta": account, "password": password };
   this.today = JSON.parse(JSON.stringify(myCredentials));
@@ -10,7 +10,7 @@ Given('a user with account number: {string} and password: {string}', function (a
 });
 
 When('I send POST request to /login', async function () {
-  this.actualAnswer = await restHelper.postData(`http://localhost:4000/login`, this.today);
+  this.actualAnswer = await restHelper.postData(`https://infinite-harbor-77648.herokuapp.com/login`, this.today);
 })
 
 Then('I get response code: {string}', async function (code) {

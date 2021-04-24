@@ -5,6 +5,7 @@ const Transaccion = require('../models/transaccion');
 const { v4: uuidv4 } = require('uuid');
 const router = Router();
 const { generarFecha } = require('../generarFecha');
+import sanitizeHtml from "sanitize-html";
 
 router.get('/', (req, res) => {
     res.json({'Resultado': 'API AYD1: Practica 4 - Grupo 5 :D'});
@@ -37,20 +38,20 @@ router.post("/nuevoUsuario", async (req, res) => {
             });            
         }
         
-        Usuario.exists({ CUI: data.CUI }, async function (err, doc) { 
+        Usuario.exists({ CUI: data.CUI.toString() }, async function (err, doc) { 
             if (err){ 
                 console.log(err)
                 res.status(404);
             }else {
                 if (!doc){
                     await Usuario.create({
-                        nombre: data.nombre,
-                        apellido: data.apellido,
-                        CUI: data.CUI,
+                        nombre: data.nombre.toString(),
+                        apellido: data.apellido.toString(),
+                        CUI: data.CUI.toString(),
                         cuenta: cuenta.toString(),
-                        saldo: data.saldo,
-                        correo: data.correo,
-                        password: data.password
+                        saldo: data.saldo.toString(),
+                        correo: data.correo.toString(),
+                        password: data.password.toString()
                     }); 
                     res.status(202);
                     res.json({ cuenta : cuenta });  
@@ -74,7 +75,7 @@ router.post('/eliminarUsuario', async (req, res) => {
 
         const data = req.body; 
 
-        await Usuario.findOneAndDelete({CUI: data.CUI}, function (err, docs) {
+        await Usuario.findOneAndDelete({CUI: data.CUI.toString()}, function (err, docs) {
             if (err){
                 console.log(err)
                 res.status(404);
@@ -105,7 +106,7 @@ router.post('/login', async (req, res) => {
     try {
 
         const data = req.body;
-        await Usuario.findOne({ cuenta: data.cuenta, password: data.password}, function (err, docs) { 
+        await Usuario.findOne({ cuenta: data.cuenta.toString(), password: data.password.toString()}, function (err, docs) { 
             if (err){ 
                 console.log(err)
                 res.status(404);
@@ -159,38 +160,39 @@ router.post('/nuevaTransaccion', async (req, res) => {
         }
 
 
-        await Usuario.findOne({ cuenta: data.CuentaDestino }, async function (err, docs) { 
+        await Usuario.findOne({ cuenta: data.CuentaDestino.toString() }, async function (err, docs) { 
             if (err){ 
                 console.log(err)
                 res.status(404);
                 res.send({ message : err }); 
             } else if (docs == null) {
                 res.status(404);
-                res.send({ message : "La cuenta " + data.CuentaDestino.toString() + " no corresponde ningun usuario." }); 
+                const cuentadestino = data.CuentaDestino.toString()
+                res.send({ message : "La cuenta " + sanitizeHtml(cuentadestino) + " no corresponde ningun usuario." }); 
                 console.log("La cuenta " + data.CuentaDestino.toString() + " no corresponde ningun usuario.");
             } else{ 
 
                 let date = generarFecha();
-                let credito = data.monto;
-                let debito = data.monto * (-1);
-                let descripcion = data.descripcion == null || undefined ? "" : data.descripcion; 
+                let credito = data.monto.toString();
+                let debito = data.monto.toString() * (-1);
+                let descripcion = data.descripcion.toString() == null || undefined ? "" : data.descripcion.toString(); 
 
                 await Transaccion.create({
                     ID: idTransaccion,
-                    CuentaOrigen: data.CuentaOrigen,
-                    CuentaDestino: data.CuentaDestino,
-                    monto: data.monto,
+                    CuentaOrigen: data.CuentaOrigen.toString(),
+                    CuentaDestino: data.CuentaDestino.toString(),
+                    monto: data.monto.toString(),
                     fecha: date,
                     descripcion: descripcion
                 }); 
 
                 await Usuario.findOneAndUpdate(
-                    { cuenta: data.CuentaDestino },
+                    { cuenta: data.CuentaDestino.toString() },
                     { $inc : { saldo : credito } } 
                 );
 
                 await Usuario.findOneAndUpdate(
-                    { cuenta: data.CuentaOrigen },
+                    { cuenta: data.CuentaOrigen.toString() },
                     { $inc : { saldo : debito } } 
                 );
 
@@ -215,7 +217,7 @@ router.post('/reporteTransaccion', async (req, res) => {
         var debitos, creditos;
 
 
-        await Usuario.findOne({ cuenta: data.cuenta }, async function (err, docs) { 
+        await Usuario.findOne({ cuenta: data.cuenta.toString() }, async function (err, docs) { 
 
             if (err){ 
                 console.log(err)
@@ -240,7 +242,7 @@ router.post('/reporteTransaccion', async (req, res) => {
                     } 
                 }); 
         
-                await Transaccion.find({ CuentaDestino: data.cuenta}, function (err, cred) {
+                await Transaccion.find({ CuentaDestino: data.cuenta.toString()}, function (err, cred) {
                     if (err){ 
                         console.log(err)
                         res.status(404);
@@ -271,7 +273,7 @@ router.post('/consultarSaldo', async (req, res) => {
     try {
 
         const data = req.body;
-        await Usuario.findOne({ cuenta: data.cuenta }, function (err, docs) { 
+        await Usuario.findOne({ cuenta: data.cuenta.toString() }, function (err, docs) { 
             if (err){ 
                 console.log(err)
                 res.status(404);
