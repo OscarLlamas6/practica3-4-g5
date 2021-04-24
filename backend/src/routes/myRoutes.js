@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
     try {
 
         const data = req.body;
-        await Usuario.findOne({ cuenta: data.cuenta.toString(), password: data.password.toString()}, function (err, docs) { 
+        await Usuario.findOne({ cuenta: data.cuenta, password: data.password}, function (err, docs) { 
             if (err){ 
                 console.log(err)
                 res.status(404);
