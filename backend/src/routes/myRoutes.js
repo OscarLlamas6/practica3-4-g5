@@ -49,7 +49,7 @@ router.post("/nuevoUsuario", async (req, res) => {
                         apellido: data.apellido.toString(),
                         CUI: data.CUI.toString(),
                         cuenta: cuenta.toString(),
-                        saldo: data.saldo.toString(),
+                        saldo: data.saldo,
                         correo: data.correo.toString(),
                         password: data.password.toString()
                     }); 
@@ -105,7 +105,7 @@ router.post('/login', async (req, res) => {
 
     try {
 
-        const data = req.body;
+        const data = req.body.toString();
         await Usuario.findOne({ cuenta: data.cuenta, password: data.password}, function (err, docs) { 
             if (err){ 
                 console.log(err)
