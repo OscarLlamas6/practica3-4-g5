@@ -106,8 +106,8 @@ router.post('/login', async (req, res) => {
     try {
 
         const data = req.body;
-        const cuentaIngresada = data.cuenta.toString();
-        const contraIngresada = data.password.toString();
+        const cuentaIngresada = data.cuenta;
+        const contraIngresada = data.password;
         await Usuario.findOne({ cuenta: cuentaIngresada, password: contraIngresada}, function (err, docs) { 
             if (err){ 
                 console.log(err)
