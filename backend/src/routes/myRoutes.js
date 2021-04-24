@@ -5,7 +5,7 @@ const Transaccion = require('../models/transaccion');
 const { v4: uuidv4 } = require('uuid');
 const router = Router();
 const { generarFecha } = require('../generarFecha');
-import sanitizeHtml from "sanitize-html";
+const sanitizeHtml = require('sanitize-html');
 
 router.get('/', (req, res) => {
     res.json({'Resultado': 'API AYD1: Practica 4 - Grupo 5 :D'});
