@@ -1,8 +1,8 @@
 const assert = require("assert");
 const { Given, When, Then } = require("cucumber");
 let restHelper = require("../../../../utils/restHelper");
+var {setDefaultTimeout} = require('cucumber');
 setDefaultTimeout(60 * 1000);
-let restHelper = require("../../../../utils/restHelper");
 
 Given('an user with account number: {string} and password: {string}', function (account, password) {
 
