@@ -19,6 +19,8 @@ Integrantes
 * [Diagrama de Arquitectura](#diagrama-de-arquitectura)
 * [Casos de Prueba](#casos-de-prueba)
     * [BackEnd](#backend)
+        * [Pruebas Unitarias](#pruebas-unitarias)
+        * [Pruebas Funcionales](#pruebas-funcionales)
     * [FrontEnd](#frontend)
 * [Anexos](#anexos)
     * [Capturas de pantalla de la aplicación](#capturas-de-pantalla)
@@ -31,6 +33,9 @@ En el siguiente diagrama se observa la arquitectura a utilizar para construir el
 # Casos de Prueba
 
 ## **Backend**
+
+### Pruebas Unitarias
+
 <table>
 <tr style="text-align:center;">
     <td>Caso de Prueba</td>
@@ -394,6 +399,223 @@ describe("testeando generarFecha: ", function() {
         });
     });
 });
+  ```
+</td>
+</tr>
+</table>
+
+### Pruebas Funcionales
+
+<table>
+<tr style="text-align:center;">
+    <td>Escenario</td>
+    <td>Prueba Funcional</td>
+</tr>
+<tr>
+<td>
+
+```feature
+Scenario Outline: Como usuario puedo o no ingresar al sistema?
+    Given an user with account number: "<account>" and password: "<password>"
+    When I send POST request to /login
+    Then I get response code: "<status>"
+
+    Examples:
+        | account        | password  | status |
+        | 37747947969500 | 123456789 | 202    |
+        | 37747947969500 | 123456781 | 200    |
+```
+
+</td>
+<td>
+
+  ```js
+Given('an user with account number: {string} and password: {string}', 
+    function (account, password) {
+        myCredentials = { "cuenta": account, "password": password };
+        this.today = JSON.parse(JSON.stringify(myCredentials))
+    }
+);
+
+When('I send POST request to /login', async function () {
+  this.actualAnswer = await restHelper.postData(
+      `https://infinite-harbor-77648.herokuapp.com/login`,
+      this.today
+    );
+});
+
+Then('I get response code: {string}', async function (code) {
+  assert.equal(String(this.actualAnswer.status), String(code));
+});
+
+  ```
+</td>
+</tr>
+<tr>
+<td>
+
+```feature
+Scenario Outline: como usuario puedo o no consultar mi saldo?
+Given an user with account number: "<account>"
+When I send POST request to /consultarSaldo
+Then I get response code: "<status>"
+
+Examples:
+    | account        | status |
+    | 37747947969500 | 202    |
+    | 37747947969501 | 200    |
+```
+
+</td>
+<td>
+
+  ```js
+Given('an user with account number: {string}', function (account) {
+  myCredentials = { "cuenta": account };
+  this.today = JSON.parse(JSON.stringify(myCredentials));
+});
+
+When('I send POST request to /consultarSaldo', async function () {
+  this.actualAnswer = await restHelper.postData(
+      `https://infinite-harbor-77648.herokuapp.com/consultarSaldo`, 
+      this.today);
+});
+
+Then('I get response code: {string}', async function (code) {
+  assert.equal(String(this.actualAnswer.status), String(code));
+});
+
+  ```
+</td>
+</tr>
+<tr>
+<td>
+
+```feature
+Scenario Outline: como usuario puedo o no registrarme en el sistema?
+Given a new user with credentials: "<name>", "<lastname>", "<CUI>", "<balance>", "mail" and "password"
+When I send POST request to /nuevoUsuario
+Then I get response code: "<status>"
+
+Examples:
+    | name   | lastname | CUI            | balance | mail             | password  | status |
+    | prueba | exitosa  | 3441841771168  | 178000  | prueba@gmail.com | 123456789 | 202    |
+    | prueba | fallida  | 3448688500106  | 178000  | prueba@gmail.com | 123456789 | 200    |
+```
+
+</td>
+<td>
+
+  ```js
+Given('a new user with credentials: {string}, {string}, {string}, {string}, {string} and {string}', 
+    function (name, lastname, CUI, balance, mail, password) {
+        myCredentials = { "nombre": String(name),
+                        "apellido": String(lastname),
+                        "CUI": String(CUI),
+                        "saldo": String(balance),
+                        "correo": String(mail),
+                        "password": String(password) 
+                    };
+        this.today = JSON.parse(JSON.stringify(myCredentials));
+    }
+);
+
+When('I send POST request to /nuevoUsuario', async function () {
+  this.actualAnswer = await restHelper.postData(
+      `https://infinite-harbor-77648.herokuapp.com/nuevoUsuario`, 
+      this.today
+    );
+});
+
+Then('I get response code: {string}', async function (code) {
+  assert.equal(String(this.actualAnswer.status), String(code));
+});
+
+  ```
+</td>
+</tr>
+<tr>
+<td>
+
+```feature
+Scenario Outline: Como usuario puedo o no ver mi perfil?
+Given an user with account number: "<account>" and password: "<password>"
+When I send POST request to /login
+Then I get response code: "<status>"
+
+Examples:
+    | account        | password  | status |
+    | 37747947969500 | 123456789 | 202    |
+    | 37747947969500 | 123456781 | 200    |
+```
+
+</td>
+<td>
+
+  ```js
+Given('an user with account number: {string} and password: {string}', 
+    function (account, password) {
+        myCredentials = { "cuenta": account, "password": password };
+        this.today = JSON.parse(JSON.stringify(myCredentials))
+    }
+);
+
+When('I send POST request to /login', async function () {
+  this.actualAnswer = await restHelper.postData(
+      `https://infinite-harbor-77648.herokuapp.com/login`, 
+      this.today
+    );
+});
+
+Then('I get response code: {string}', async function (code) {
+  assert.equal(String(this.actualAnswer.status), String(code));
+});
+
+  ```
+</td>
+</tr>
+<tr>
+<td>
+
+```feature
+Scenario Outline: Como usuario puedo o no realizar una transaccion?
+Given an user with account number: "<account>" who wants to send <number> quetzales 
+    to another user with account number: "<account2>"
+When I send POST request to /nuevaTransaccion
+Then I get response code: "<status>"
+
+Examples:
+    | account        | account2       | number | status |
+    | 37747947969500 | 05522194828065 | 160    | 202    |
+    | 37747947969500 | 05522194821223 | 160    | 202    |
+```
+
+</td>
+<td>
+
+  ```js
+ Given('an user with account number: {string} who wants to send {float} quetzales to another user with account number: {string}', 
+    function (account, amount, account2) {
+        myCredentials = { "CuentaOrigen": String(account),
+                            "CuentaDestino": String(account2),
+                            "monto": String(amount), 
+                            "descripcion": "BDD exitosa :D"
+                        };
+        this.today = JSON.parse(JSON.stringify(myCredentials));
+    }
+);
+
+When('I send POST request to /nuevaTransaccion', async function () {
+  this.actualAnswer = await restHelper.postData(
+      `https://infinite-harbor-77648.herokuapp.com/nuevaTransaccion`, 
+      this.today
+    );
+});
+
+Then('I get response code: {string}', async function (code) {
+  assert.equal(String(this.actualAnswer.status), String(code));
+});
+
   ```
 </td>
 </tr>
