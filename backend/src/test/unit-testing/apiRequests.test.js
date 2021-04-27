@@ -41,6 +41,54 @@ describe('Testing API REST', function(){
             });
         });
 
+        describe('Register new user: ',()=>{
+            it(`Should register a new user`, (done) => {
+            chai.request(app)
+            .post('/nuevoUsuario')
+            .send({
+                nombre: "Usuario",
+                apellido: "Prueba",
+                CUI: "2448618884917871",
+                saldo: 175000,
+                correo: "usuario@gmail.com",
+                password: "123456781"
+            })
+            .end( function(err,res){
+                if (err){
+                    console.log(err);
+                } else {
+                    console.log(res.body)
+                    expect(res).to.have.status(202);
+                    done();
+                }
+            });
+            });
+        });
+
+        describe('Register new user: ',()=>{
+            it(`Shouldn't register a new user`, (done) => {
+            chai.request(app)
+            .post('/nuevoUsuario')
+            .send({
+                nombre: "Usuario",
+                apellido: "Prueba 2",
+                CUI: "3448688500106",
+                saldo: 175000,
+                correo: "usuario2@gmail.com",
+                password: "123456781"
+            })
+            .end( function(err,res){
+                if (err){
+                    console.log(err);
+                } else {
+                    console.log(res.body)
+                    expect(res).to.have.status(404);
+                    done();
+                }
+            });
+            });
+        });
+
         describe('Get profile: ',()=>{
             it('should get profile', (done) => {
             chai.request(app)
