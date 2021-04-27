@@ -8,7 +8,7 @@ const { generarFecha } = require('../generarFecha');
 const sanitizeHtml = require('sanitize-html');
 
 router.get('/', (req, res) => {
-    res.json({'Resultado': 'API AYD1: Practica 4 - Grupo 5 :D'});
+    res.json({'Resultado': 'API AYD1: Practica 4 - Grupo 5 :)'});
 });
 
 router.post("/nuevoUsuario", async (req, res) => {
