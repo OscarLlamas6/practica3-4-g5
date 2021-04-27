@@ -8,7 +8,7 @@ on:
       - develop
 
 jobs:
-  pruebas_unitarias:
+  automatizacion_pruebas:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,6 +20,4 @@ jobs:
           node-version: 12   
       - run: npm ci
       - run: npm run test
-      - run: ./node_modules/.bin/pm2 start index.js
       - run: npm run cucumber -s
-      - run: ./node_modules/.bin/pm2 stop index.js
