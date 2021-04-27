@@ -42,6 +42,27 @@ async function main(){
     await connect();
    //Express application
    await app.listen(app.get('port'));
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
+   console.log(`:D :)`);
    console.log(`Server on port ${app.get('port')}: connected! :D :)`)
 };
 
